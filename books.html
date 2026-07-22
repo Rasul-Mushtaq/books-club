@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استبانة نادي الكتب | جامعة بغداد</title>
+    <!-- الخطوط الأكاديمية الفاخرة -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #FDFBF7 0%, #F5EFE6 100%);
+            --primary-color: #704214; /* بني دافئ فاخر */
+            --primary-light: #8C6239;
+            --secondary-color: #D9C5B2;
+            --accent-color: #EADBC8;
+            --text-dark: #3E322A;
+            --text-light: #6E5A4E;
+            --white: #ffffff;
+            --shadow: 0 20px 40px rgba(112, 66, 20, 0.08);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* الخلفية المائية المتحركة الدائرية الناعمة */
+        .bg-circles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .circle {
+            position: absolute;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(60px);
+            animation: floatCircle 20s infinite alternate ease-in-out;
+        }
+        .c1 { width: 300px; height: 300px; top: -50px; right: -50px; }
+        .c2 { width: 400px; height: 400px; bottom: -100px; left: -100px; animation-delay: -5s; }
+
+        @keyframes floatCircle {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 40px) scale(1.1); }
+        }
+
+        /* الحاوية الرئيسية بتأثير زجاجي ناعم */
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 45px 35px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            z-index: 1;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        /* الهوية البصرية لشعار الجامعة */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .uob-title {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            color: var(--primary-light);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .main-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.6rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+
+        .description {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* الأزرار الفاخرة */
+        .btn-prime {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 14px 45px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(112, 66, 20, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-prime:hover {
+            background: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(112, 66, 20, 0.3);
+        }
+        .welcome-screen {
+            text-align: center;
+        }
+
+        /* شاشات الأسئلة */
+        .survey-screen, .end-screen {
+            display: none;
+        }
+
+        /* شريط التقدم الحديث */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 35px;
+            gap: 15px;
+        }
+        .survey-progress {
+            flex-grow: 1;
+            height: 6px;
+            background: var(--accent-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .progress-text {
+            font-size: 0.95rem;
+            color: var(--primary-light);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* البلوكات الخاصة بالأسئلة */
+        .question-block {
+            display: none;
+        }
+        .question-block.active {
+            display: block;
+            animation: slideUp 0.5s var(--transition) forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-text {
+            font-size: 1.35rem;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        /* خيارات الإجابة المصممة كبطاقات */
+        .options-list {
+            list-style: none;
+        }
+        .option-item {
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px solid transparent;
+            padding: 18px 22px;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .option-item:hover {
+            background: var(--white);
+            border-color: var(--secondary-color);
+            transform: translateX(-5px);
+        }
+        .option-item.selected {
+            border-color: var(--primary-color);
+            background: rgba(234, 219, 200, 0.3);
+        }
+
+        .option-item input[type="radio"],
+        .option-item input[type="checkbox"] {
+            margin-left: 15px;
+            accent-color: var(--primary-color);
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        /* حقل الإدخال لـ "أخرى" */
+        .other-input {
+            border: none;
+            border-bottom: 2px solid var(--secondary-color);
+            background: transparent;
+            padding: 4px 10px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            width: 70%;
+            margin-right: 10px;
+            outline: none;
+            transition: var(--transition);
+        }
+        .other-input:focus {
+            border-bottom-color: var(--primary-color);
+        }
+        /* أزرار التنقل الأسفل */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+        }
+        .btn-sec {
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--text-light);
+            padding: 12px 35px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+        .btn-sec:hover:not(:disabled) {
+            background: var(--accent-color);
+            color: var(--text-dark);
+            border-color: var(--primary-light);
+        }
+        .btn-sec:disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+        }
+        /* تصميم المساحة النصية للأسئلة المفتوحة */
+.open-question-container {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.description-textarea {
+    width: 100%;
+    padding: 20px;
+    border: 2px solid var(--accent-color);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    font-family: 'Tajawal', sans-serif;
+    resize: none; /* لمنع المستخدم من تخريب أبعاد التصميم */
+    outline: none;
+    transition: var(--transition);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+.description-textarea:focus {
+    background: var(--white);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(112, 66, 20, 0.05);
+}
+
+/* نمط مخصص عندما يقوم المستخدم بالكتابة لتمييز البطاقة */
+.description-textarea.filled {
+    border-color: var(--primary-light);
+    background: rgba(234, 219, 200, 0.2);
+}
+
+        /* شاشات النهاية الاستثنائية */
+        .end-screen {
+            text-align: center;
+        }
+        .end-screen h2 {
+            font-family: 'Amiri', serif;
+            font-size: 2.4rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .group-link-card {
+            background: var(--white);
+            border: 2px dashed var(--primary-light);
+            padding: 30px 20px;
+            border-radius: 20px;
+            margin: 30px auto;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .btn-telegram {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #229ED9;
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(34, 158, 217, 0.3);
+            transition: var(--transition);
+        }
+        .btn-telegram:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(34, 158, 217, 0.5);
+        }
+        .footer-note {
+            font-size: 1.05rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-circles">
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+</div>
+
+<div class="container" id="mainContainer">
+    
+    <!-- 1. الواجهة الترحيبية -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="brand-header">
+            <div class="uob-title">جامعة بغداد</div>
+            <h1 class="main-title">نادي الكتب</h1>
+        </div>
+        <div class="divider"></div>
+        <p class="description">
+            أهلاً بك في الفضاء المعرفي المخصص لشغوفي القراءة. نود استكشاف تطلعاتك وآرائك من خلال هذه الاستبانة الأولية البسيطة للمساهمة في بناء مجتمع قرائي يليق بجامعتنا العريقة.
+        </p>
+        <button class="btn-prime" onclick="startSurvey()">البدء بالاستبانة ←</button>
+    </div>
+
+    <!-- 2. شاشة الاستبانة -->
+    <div class="survey-screen" id="surveyScreen">
+        <div class="progress-container">
+            <div class="survey-progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">السؤال 1 من 6</div>
+        </div>
+
+        <form id="surveyForm" onsubmit="event.preventDefault();">
+            
+            <!-- السؤال الاول -->
+            <div class="question-block active" data-q="1">
+                <h3 class="question-text">1. ما مدى اهتمامك بالقراءة؟</h3>
+                <ul class="options-list">
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q1" value="عالٍ"> عالٍ</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q1" value="متوسط"> متوسط</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q1" value="قليل"> قليل</li>
+                </ul>
+            </div>
+            <!-- السؤال الثاني -->
+            <div class="question-block" data-q="2">
+                <h3 class="question-text">2. هل تعتقد أن جامعة بغداد تحتاج إلى نادي كتب؟</h3>
+                <ul class="options-list">
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q2" value="نعم"> نعم</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q2" value="لا"> لا</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q2" value="لست متأكدًا"> لست متأكدًا</li>
+                </ul>
+            </div>
+
+            <!-- السؤال الثالث -->
+            <div class="question-block" data-q="3">
+                <h3 class="question-text">3. كم كتابًا تقرأ تقريبًا في السنة؟</h3>
+                <ul class="options-list">
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q3" value="0"> 0</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q3" value="1–3"> 1–3</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q3" value="4–6"> 4–6</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q3" value="أكثر من 6"> أكثر من 6</li>
+                </ul>
+            </div>
+
+            <!-- السؤال الرابع (سؤال مفتوح وصفي) -->
+<div class="question-block" data-q="4">
+    <h3 class="question-text">4. ما أكثر شيء قد يشجعك على الانضمام إلى نادي كتب؟ ( مثلاً مناقشات كتب ، تبادل الكتب ، فعاليات ثقافية ، تحديات قراءة ، لقاءات مع كتّاب ، تكوين صداقات مع مهتمين بالقراءة ...... )</h3>
+    <div class="open-question-container">
+        <textarea 
+            name="q4" 
+            id="descQuestion4" 
+            class="description-textarea" 
+            placeholder="اكتب تطلعاتك، أفكارك، أو الأنشطة التي تتمنى وجودها في النادي هنا..."
+            rows="6"
+            oninput="handleTextareaInput(this)"
+        ></textarea>
+    </div>
+</div>
+
+            <!-- السؤال الخامس -->
+            <div class="question-block" data-q="5">
+                <h3 class="question-text">5. ما أكبر سبب قد يمنعك من الانضمام إلى نادي كتب؟</h3>
+                <ul class="options-list">
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q5" value="ضيق الوقت"> ضيق الوقت</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q5" value="لا أحب القراءة"> لا أحب القراءة</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q5" value="بعد مكان الفعاليات"> بعد مكان الفعاليات</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q5" value="لا أعرف ماذا يقدم النادي"> لا أعرف ماذا يقدم النادي</li>
+                    <li class="option-item" onclick="selectOption(this, false, true)">
+                        <input type="radio" name="q5" value="أخرى" id="radOther5"> أخرى:
+                        <input type="text" class="other-input" id="other5" onclick="event.stopPropagation()" placeholder="اكتب هنا...">
+                    </li>
+                </ul>
+            </div>
+
+            <!-- السؤال السادس -->
+            <div class="question-block" data-q="6">
+                <h3 class="question-text">6. هل ستفكر بالانضمام إذا تم تأسيس نادي كتب؟</h3>
+                <ul class="options-list">
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q6" value="نعم بالتأكيد" id="joinYes"> نعم بالتأكيد</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q6" value="ربما" id="joinMaybe"> ربما</li>
+                    <li class="option-item" onclick="selectOption(this)"><input type="radio" name="q6" value="لا" id="joinNo"> لا</li>
+                </ul>
+            </div>
+
+            <!-- أزرار التحكم -->
+            <div class="nav-buttons">
+                <button type="button" class="btn-sec" id="btnPrev" onclick="prevQuestion()" disabled>السابق</button>
+                <button type="button" class="btn-prime" id="btnNext" onclick="nextQuestion()">التالي ←</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- 3. شاشات النهاية -->
+    <div class="end-screen" id="endScreenWelcome">
+        <h2>مرحباً بك في مجتمعنا القادم!</h2>
+        <div class="divider"></div>
+        <p class="footer-note">
+            يسعدنا جداً شغفك واهتمامك بالانضمام إلى نادي الكتب في جامعة بغداد. نحن الآن في المراحل التحضيرية لبناء تجربة ثقافية فريدة ومميزة تليق بكم.
+        </p>
+        <div class="group-link-card">
+            <p style="font-weight: 700; color: var(--text-dark); font-size: 1.1rem;">انضموا الآن إلى قنواتنا الرسمية لتكونوا أول المتواجدين:</p>
+            <a href="https://t.me/+dZf9xpp2EpthM2Ey" target="_blank" class="btn-telegram">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                الانضمام إلى مجتمع النادي عبر تليغرام
+            </a>
+        </div>
+        <p class="footer-note" style="font-style: italic; color: var(--primary-color); font-weight: 500;">
+            انتظرونا قريباً.. سنقوم بنشر الاستمارة الرسمية للتسجيل النهائي داخل المجموعة لتثبيت انضمامكم الإداري للنادي فور الإطلاق.
+        </p>
+    </div>
+
+    <div class="end-screen" id="endScreenThanks">
+        <h2>شكراً لمشاركتك وقتك وثقافتك</h2>
+        <div class="divider"></div>
+        <p class="description">
+            ممتنون جداً لمشاركتك معنا في هذه الاستبانة الأولية. إجاباتك تساعدنا في فهم توجهات واحتياجات مجتمع جامعة بغداد بشكل أفضل لتطوير النادي. نتمنى لك التوفيق والنجاح دائماً.
+        </p>
+    </div>
+
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKP2j5jAJvbGJhZTLpWhNvrQ4kE5HvwPJFoJUy0YhXRKOp9BPkEGie2hwz0w-kHU5c/exec";
+    let currentStep = 1;
+    const totalSteps = 6;
+
+    function startSurvey() {
+        document.getElementById('welcomeScreen').style.display = 'none';
+        document.getElementById('surveyScreen').style.display = 'block';
+        updateProgressBar();
+    }
+
+    function selectOption(element, isCheckbox = false, isOther = false) {
+        const input = element.querySelector('input');
+        
+        if (!isCheckbox) {
+            // راديو: إلغاء تحديد الباقي في نفس المجموعة
+            const siblings = element.closest('.options-list').querySelectorAll('.option-item');
+            siblings.forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            input.checked = true;
+            
+            // تفعيل الفوكس لو تم اختيار "أخرى"
+            if (isOther) {
+                const textInput = element.querySelector('.other-input');
+                if(textInput) textInput.focus();
+            }
+        } else {
+            // تشيك بوكس: اختيار متعدد
+            input.checked = !input.checked;
+            if (input.checked) {
+                element.classList.add('selected');
+                if (isOther) {
+                    const textInput = element.querySelector('.other-input');
+                    if(textInput) textInput.focus();
+                }
+            } else {
+                element.classList.remove('selected');
+            }
+        }
+    }
+    function updateProgressBar() {
+        const percent = ((currentStep) / totalSteps) * 100;
+        document.getElementById('progressBar').style.width = percent + '%';
+        document.getElementById('progressText').innerText =` السؤال ${currentStep} من ${totalSteps}`;
+    }
+
+    function nextQuestion() {
+    const currentBlock = document.querySelector(`.question-block[data-q="${currentStep}"]`);
+    let isAnswered = false;
+
+    // التحقق إذا كان السؤال الحالي يحتوي على خيارات (راديو أو تشيك بوكس)
+    const inputs = currentBlock.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+    if (inputs.length > 0) {
+        inputs.forEach(input => {
+            if (input.checked) isAnswered = true;
+        });
+    } 
+    // التحقق إذا كان السؤال مفتوحاً وصفيّاً (Textarea)
+    else {
+        const textarea = currentBlock.querySelector('textarea');
+        if (textarea && textarea.value.trim() !== "") {
+            isAnswered = true;
+        }
+    }
+
+    if (!isAnswered) {
+        alert("يرجى الإجابة على السؤال للمتابعة.");
+        return;
+    }
+
+    if (currentStep < totalSteps) {
+        currentBlock.classList.remove('active');
+        currentStep++;
+        const nextBlock = document.querySelector(`.question-block[data-q="${currentStep}"]`);
+        nextBlock.classList.add('active');
+        
+        document.getElementById('btnPrev').disabled = false;
+        if (currentStep === totalSteps) {
+            document.getElementById('btnNext').innerText = "إرسال الاستبانة";
+        }
+        updateProgressBar();
+    } else {
+        submitSurvey();
+    }
+}
+    function prevQuestion() {
+        if (currentStep > 1) {
+            const currentBlock = document.querySelector(`.question-block[data-q="${currentStep}"]`);
+            currentBlock.classList.remove('active');
+            currentStep--;
+            const prevBlock = document.querySelector(`.question-block[data-q="${currentStep}"]`);
+            prevBlock.classList.add('active');
+
+            document.getElementById('btnNext').innerText = "التالي ←";
+            if (currentStep === 1) {
+                document.getElementById('btnPrev').disabled = true;
+            }
+            updateProgressBar();
+        }
+    }
+
+    function showFinalScreen() {
+        document.getElementById('surveyScreen').style.display = 'none';
+        const isYes = document.getElementById('joinYes').checked;
+        const isMaybe = document.getElementById('joinMaybe').checked;
+
+        if (isYes || isMaybe) {
+            document.getElementById('endScreenWelcome').style.display = 'block';
+        } else {
+            document.getElementById('endScreenThanks').style.display = 'block';
+        }
+    }
+    function handleTextareaInput(textarea) {
+    if (textarea.value.trim() !== "") {
+        textarea.classList.add('filled');
+    } else {
+        textarea.classList.remove('filled');
+    }
+}
+function submitSurvey() {
+
+    let q5Value;
+
+    if(document.getElementById("radOther5").checked){
+
+        const other =
+        document.getElementById("other5").value;
+
+        q5Value = other.trim() !== "" ? other : "أخرى";
+
+    }else{
+
+        q5Value =
+        document.querySelector('input[name="q5"]:checked').value;
+
+    }
+
+    const data = {
+
+        q1: document.querySelector('input[name="q1"]:checked').value,
+
+        q2: document.querySelector('input[name="q2"]:checked').value,
+
+        q3: document.querySelector('input[name="q3"]:checked').value,
+
+        q4: document.getElementById("descQuestion4").value,
+
+        q5: q5Value,
+
+        q6: document.querySelector('input[name="q6"]:checked').value
+
+    };
+
+    fetch(SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(data)
+})
+
+    .then(res=>res.json())
+
+    .then(result=>{
+
+        showFinalScreen();
+
+    })
+
+    .catch(err => {
+    alert(err);
+    console.error(err);
+});
+}
+</script>
+
+</body>
+</html>
