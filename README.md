@@ -1,8 +1,6 @@
 ## About
 This website was created to be a temporary application form for the University of Baghdad Books Club.
 
-https://books-club-uob.netlify.app/
-
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue?style=for-the-badge)](https://books-club-uob.netlify.app/)
 
 ## Important Note
